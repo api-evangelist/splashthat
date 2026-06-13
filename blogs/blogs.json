@@ -1,0 +1,15 @@
+{
+  "repo": "splashthat",
+  "feeds": [
+    {
+      "source": "https://splashthat.com/blog",
+      "feed_url": "https://splashthat.com/blog",
+      "title": "Splash Blog",
+      "saved": 0,
+      "method": "html",
+      "note": "No RSS feed found; blog listing page returns 403 Forbidden"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-06-13T00:00:00Z"
+}

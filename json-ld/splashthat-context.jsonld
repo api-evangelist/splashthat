@@ -1,0 +1,107 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "splashthat": "https://splashthat.com/vocab#",
+    "aid": "splashthat",
+
+    "Organization": "Organization",
+    "name": "name",
+    "description": "description",
+    "url": "url",
+    "logo": "logo",
+    "sameAs": "sameAs",
+
+    "WebAPI": "WebAPI",
+    "documentation": "documentation",
+    "termsOfService": "termsOfService",
+    "provider": "provider",
+    "endpointURL": "endpointURL",
+
+    "SoftwareApplication": "SoftwareApplication",
+    "applicationCategory": "applicationCategory",
+
+    "event": {
+      "@id": "splashthat:event",
+      "@type": "@id"
+    },
+    "guestRegistration": {
+      "@id": "splashthat:guestRegistration",
+      "@type": "@id"
+    },
+    "checkIn": {
+      "@id": "splashthat:checkIn",
+      "@type": "@id"
+    },
+    "ticketing": {
+      "@id": "splashthat:ticketing",
+      "@type": "@id"
+    },
+    "analytics": {
+      "@id": "splashthat:analytics",
+      "@type": "@id"
+    },
+    "contact": {
+      "@id": "splashthat:contact",
+      "@type": "@id"
+    },
+    "groupContact": {
+      "@id": "splashthat:groupContact",
+      "@type": "@id"
+    },
+
+    "authentication": {
+      "@id": "splashthat:authentication",
+      "@type": "@id"
+    },
+    "oauth2": {
+      "@id": "splashthat:oauth2",
+      "@type": "@id"
+    },
+    "clientCredentials": {
+      "@id": "splashthat:clientCredentials",
+      "@type": "@id"
+    },
+
+    "eventMarketing": {
+      "@id": "splashthat:eventMarketing",
+      "@type": "@id"
+    },
+    "virtualEvent": {
+      "@id": "splashthat:virtualEvent",
+      "@type": "@id"
+    },
+    "hybridEvent": {
+      "@id": "splashthat:hybridEvent",
+      "@type": "@id"
+    },
+    "liveEvent": {
+      "@id": "splashthat:liveEvent",
+      "@type": "@id"
+    },
+
+    "restAPI": {
+      "@id": "splashthat:restAPI",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "Splash",
+      "description": "Splash is an event marketing platform that helps companies market, manage, and measure their live, virtual, and hybrid event programs.",
+      "url": "https://splashthat.com",
+      "sameAs": [
+        "https://www.linkedin.com/company/splash-event-marketing",
+        "https://twitter.com/splashthat"
+      ]
+    },
+    {
+      "@type": "WebAPI",
+      "name": "Splash API",
+      "description": "REST API for the Splash event marketing platform enabling programmatic management of events, guest (GroupContact) records, organization-level contacts, ticketing, check-in, and event analytics. Authentication uses OAuth 2.0 client credentials flow.",
+      "documentation": "https://api-docs.splashthat.com/",
+      "endpointURL": "https://api.splashthat.com",
+      "termsOfService": "https://splashthat.com/terms"
+    }
+  ]
+}
