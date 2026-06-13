@@ -1,0 +1,49 @@
+rateLimits:
+  description: >
+    Splash enforces API rate limits to maintain platform stability and ensure
+    fair usage across all tenants. Limits apply per team (Client ID) and are
+    measured across rolling time windows. Webhook (Simple Postback) calls do
+    NOT count against the API call quota.
+
+  source: https://support.splashthat.com/hc/en-us/articles/13759878758541-What-is-API-rate-limiting-and-what-are-the-benefits-and-impacts
+
+  global:
+    requestsPerSecond: 2
+    requestsPerHour: 1000
+    requestsPer15Minutes: 250
+    dailyLimit: plan-dependent-contact-CSM
+    scope: per-team (Client ID)
+
+  headers:
+    rateLimitExceeded: "429 Too Many Requests"
+    dailyLimitExceeded: "503 Service Unavailable"
+    resetHeader: RateLimit-Reset
+    resetUnit: seconds
+
+  behavior:
+    onRateLimitHit: >
+      The API returns HTTP 429 Too Many Requests. The RateLimit-Reset response
+      header indicates how many seconds to wait before retrying. Splash
+      recommends reusing access tokens across requests and pacing calls to
+      avoid hitting limits.
+    onDailyLimitHit: >
+      All syncs are stopped for the remainder of the day. Syncing resumes
+      automatically the following day. Data that failed to sync during the
+      blackout window is NOT automatically re-synced. Contact your Customer
+      Success Manager to review your daily allocation.
+
+  exemptions:
+    - type: Webhook (Simple Postback)
+      description: >
+        Outbound webhook calls configured via the Splash UI at the organization
+        or event/theme level do not count against the API call limit.
+
+  bestPractices:
+    - Reuse the same OAuth access token for multiple requests; do not request
+      a new token on every call.
+    - Implement the token refresh flow rather than re-authenticating from scratch.
+    - Pace bulk operations to stay within the 250-calls-per-15-minute bucket.
+    - Use webhooks (Simple Postback) for real-time event data delivery to
+      avoid consuming your API quota.
+    - Contact your Customer Success Manager to understand your team's specific
+      daily limit and options for increasing it.

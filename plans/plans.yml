@@ -1,0 +1,78 @@
+plans:
+  - name: Starter
+    description: >
+      Entry-level plan for small teams beginning with event marketing. Includes
+      basic event creation, guest registration, and standard integrations.
+      Pricing is custom and requires contacting Splash Sales.
+    url: https://splashthat.com/pricing
+    contact: https://splashthat.com/contact
+    pricing: custom
+    pricingModel: annual-subscription
+    features:
+      - Event creation and management
+      - Guest registration and RSVP
+      - Basic event templates
+      - Email invitations
+      - Standard integrations
+    rateLimits:
+      apiCallsPerHour: 1000
+      apiCallsPer15Minutes: 250
+      rateLimitHeader: "429 Too Many Requests"
+      rateLimitResetHeader: RateLimit-Reset
+
+  - name: Professional
+    description: >
+      Mid-tier plan designed for growing marketing teams running multiple events.
+      Includes advanced analytics, custom branding, and expanded integration
+      options. Estimated $12,500–$27,000 per year based on market data.
+    url: https://splashthat.com/pricing
+    contact: https://splashthat.com/contact
+    pricing: custom
+    pricingModel: annual-subscription
+    estimatedAnnualCost: "$12,500–$27,000"
+    features:
+      - All Starter features
+      - Advanced event analytics
+      - Custom branding and white-labeling
+      - Webhook (Simple Postback) integrations
+      - Guest check-in tools
+      - Ticketing with processing fees (2.9% + $0.30 per transaction)
+      - Platform fee per ticket (2% + $1.00)
+    rateLimits:
+      apiCallsPerHour: 1000
+      apiCallsPer15Minutes: 250
+      rateLimitHeader: "429 Too Many Requests"
+      rateLimitResetHeader: RateLimit-Reset
+
+  - name: Enterprise
+    description: >
+      Full-featured plan for large organizations and agencies managing complex,
+      high-volume event programs. Includes API access, dedicated Customer
+      Success Manager, advanced security, and SLA support.
+      Estimated $27,000–$36,500+ per year.
+    url: https://splashthat.com/pricing
+    contact: https://splashthat.com/contact
+    pricing: custom
+    pricingModel: annual-subscription
+    estimatedAnnualCost: "$27,000–$36,500+"
+    additionalFees:
+      implementation: "$2,500–$7,500"
+      onboarding: "$1,500–$12,000"
+      attendeeOverage: "$0.50–$2.00 per additional attendee"
+    features:
+      - All Professional features
+      - Full REST API access (Client ID + Client Secret via CSM)
+      - OAuth 2.0 client credentials authentication
+      - Dedicated Customer Success Manager
+      - Advanced security controls
+      - Sandbox/test environment
+      - Hybrid and virtual event support
+      - Custom integrations (Salesforce, Marketo, HubSpot, etc.)
+      - SSO/SAML
+      - SLA-backed uptime
+    rateLimits:
+      apiCallsPerHour: 1000
+      apiCallsPer15Minutes: 250
+      dailyApiLimit: contact-CSM-for-details
+      rateLimitHeader: "429 Too Many Requests"
+      rateLimitResetHeader: RateLimit-Reset

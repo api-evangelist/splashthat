@@ -1,0 +1,74 @@
+finops:
+  description: >
+    Financial operations guidance for organizations consuming the Splash event
+    marketing API. Splash uses an annual subscription model with custom pricing;
+    API access is bundled into Enterprise-tier plans rather than offered as a
+    standalone product. Additional transaction, platform, onboarding, and
+    overage fees apply.
+
+  source: https://splashthat.com/pricing
+
+  subscriptionModel:
+    type: annual-subscription
+    pricingTransparency: opaque
+    notes: >
+      Splash does not publish per-tier pricing publicly. All quotes require
+      contacting the sales team. Market data (Vendr, 143 purchases) shows
+      a median annual spend of ~$27,000 with a range of $12,500–$36,500+.
+      Buyers save ~17% on average through negotiation.
+
+  estimatedAnnualCosts:
+    low: "$12,500"
+    median: "$27,000"
+    high: "$36,500+"
+    source: https://www.vendr.com/marketplace/splash
+
+  additionalFees:
+    - name: Ticket transaction fee
+      amount: "2.9% + $0.30"
+      unit: per transaction
+      notes: Standard payment processing fee on paid tickets.
+
+    - name: Platform fee per ticket
+      amount: "2% + $1.00"
+      unit: per ticket
+      notes: Splash platform fee applied on top of transaction processing fee.
+
+    - name: Attendee overage
+      amount: "$0.50–$2.00"
+      unit: per additional attendee above plan limit
+      notes: Charged when event attendance exceeds the contracted seat allowance.
+
+    - name: Implementation fee
+      amount: "$2,500–$7,500"
+      unit: one-time
+      notes: One-time fee for initial platform setup and technical configuration.
+
+    - name: Onboarding fee
+      amount: "$1,500–$12,000"
+      unit: one-time
+      notes: >
+        One-time fee for team onboarding, training, and enablement. Varies by
+        plan tier and scope of onboarding services required.
+
+  apiAccess:
+    included: true
+    requiredPlan: Enterprise
+    notes: >
+      API access (Client ID + Client Secret) is available on Enterprise plans.
+      Credentials are provisioned by the Customer Success Manager and delivered
+      via a secure messaging channel. There is no self-serve API key portal.
+
+  costOptimizationTips:
+    - Negotiate annual contracts; vendors like Vendr report average savings of 17%.
+    - Use Splash webhooks (Simple Postback) for real-time data delivery to avoid
+      consuming API call quota, which reduces risk of overage charges tied to
+      custom integration work.
+    - Reuse OAuth access tokens across API calls to reduce authentication overhead
+      and stay within rate limit buckets, avoiding costly re-sync operations.
+    - Clarify your team's daily API call limit with your Customer Success Manager
+      before go-live to right-size your integration architecture.
+    - Consolidate event programs under a single Splash organization to share the
+      API rate limit pool efficiently rather than managing multiple accounts.
+    - Evaluate whether webhook-driven integrations (which are free of API quota)
+      can replace polling-based API calls for high-frequency data needs.

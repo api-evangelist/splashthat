@@ -1,0 +1,76 @@
+name: Splash
+description: >
+  Splash is an event marketing platform that helps companies market, manage,
+  and measure their live, virtual, and hybrid event programs. The Splash REST
+  API enables brands and agencies to programmatically manage events, handle
+  guest registration, process check-in, and pull event analytics. API access
+  uses OAuth 2.0 client credentials and covers resources such as events,
+  group contacts (guests), contacts, and ticketing.
+image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/splashthat/refs/heads/main/apis.yml
+created: "2026-06-13"
+modified: "2026-06-13"
+specificationVersion: "0.19"
+tags:
+  - Events
+  - Event Marketing
+  - Event Management
+  - Guest Registration
+  - Ticketing
+  - Check-In
+  - Analytics
+apis:
+  - name: Splash API
+    description: >
+      REST API for the Splash event marketing platform. Enables programmatic
+      management of events, guest (GroupContact) records, organization-level
+      contacts, ticketing, check-in, and event analytics. Authentication uses
+      OAuth 2.0 client credentials flow with a Client ID and Client Secret
+      issued by the Splash Customer Success team.
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://api-docs.splashthat.com/
+    baseURL: https://api.splashthat.com
+    tags:
+      - Events
+      - Guest Registration
+      - Ticketing
+      - Check-In
+      - Analytics
+    properties:
+      - type: Documentation
+        url: https://api-docs.splashthat.com/
+      - type: OpenAPI
+        url: https://api-docs.splashthat.com/
+      - type: Authentication
+        url: https://support.splashthat.com/hc/en-us/articles/360043539711-HTTP-Request-Integration-Guide
+    contact:
+      - FN: Splash Support
+        url: https://support.splashthat.com/
+        email: ""
+common:
+  - type: Documentation
+    url: https://api-docs.splashthat.com/
+  - type: Support
+    url: https://support.splashthat.com/
+  - type: Blog
+    url: https://splashthat.com/blog
+  - type: Press
+    url: https://splashthat.com/press
+  - type: Pricing
+    url: https://splashthat.com/pricing
+  - type: Status
+    url: https://status.cvent.com/
+  - type: Integrations
+    url: https://splashthat.com/platform/integrations
+  - type: TermsOfService
+    url: https://splashthat.com/terms
+  - type: PrivacyPolicy
+    url: https://splashthat.com/privacy
+  - type: Security
+    url: https://splashthat.com/security
+  - type: RateLimits
+    url: https://support.splashthat.com/hc/en-us/articles/13759878758541-What-is-API-rate-limiting-and-what-are-the-benefits-and-impacts
+maintainers:
+  - FN: API Evangelist
+    url: https://apievangelist.com
+    email: info@apievangelist.com
