@@ -6,7 +6,7 @@ description: >
   guest registration, process check-in, and pull event analytics. API access
   uses OAuth 2.0 client credentials and covers resources such as events,
   group contacts (guests), contacts, and ticketing.
-image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/splashthat/refs/heads/main/apis.yml
 created: "2026-06-13"
 modified: "2026-06-13"
@@ -27,7 +27,7 @@ apis:
       contacts, ticketing, check-in, and event analytics. Authentication uses
       OAuth 2.0 client credentials flow with a Client ID and Client Secret
       issued by the Splash Customer Success team.
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://api-docs.splashthat.com/
     baseURL: https://api.splashthat.com
     tags:
