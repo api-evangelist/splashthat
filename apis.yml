@@ -48,6 +48,8 @@ apis:
         url: https://support.splashthat.com/
         email: ""
 common:
+  - type: DomainSecurity
+    url: security/splashthat-domain-security.yml
   - type: Documentation
     url: https://api-docs.splashthat.com/
   - type: Support
