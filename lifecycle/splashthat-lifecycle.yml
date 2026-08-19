@@ -1,0 +1,77 @@
+generated: '2026-08-13'
+method: searched
+source: https://api-docs.splashthat.com/
+artifact_source: postman/splashthat-api.postman_collection.json
+note: >
+  Versioning read from the provider's own published contract; status-page and
+  deprecation findings are the result of live probes on 2026-08-13. Splash was
+  acquired by Cvent on 2024-09-04 and now operates as a Cvent product, which is
+  why the operational surfaces point at Cvent hosts.
+versioning:
+  scheme: mixed-path-and-document
+  current: 'Splash API v2.2 (title of the published Postman collection)'
+  published: '2019-10-22'
+  paths:
+    - prefix: /oauth/v2/
+      surface: authentication
+    - prefix: /v1/
+      surface: Team Manager, Forms
+    - prefix: (none)
+      surface: /events, /groupcontacts, /contacts, /workflows, /public/unsubscribe
+    - prefix: /api/v2/crm/
+      surface: CRM event creation (on splashthat.com, not api.splashthat.com)
+  docs: https://api-docs.splashthat.com/
+  note: >
+    Splash exposes no version header, no version negotiation and no dated
+    version identifier. The only version signal a consumer can read is the
+    collection title and the inconsistent path prefixes.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: unknown
+  deprecation_header: unknown
+  note: >
+    No deprecation or sunset policy is published anywhere on the Splash
+    developer surface, and no RFC 8594 Sunset/Deprecation header is documented.
+    No `Deprecation` pointer is emitted in apis.yml because there is no policy
+    to point at.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  note: >
+    SLA-backed uptime is described as an Enterprise-tier entitlement in the
+    plans artifact, but Splash publishes no SLA document publicly.
+status_page:
+  splash_own:
+    url: https://splashthat.statuspage.io/
+    status: 200
+    state: inactive
+    evidence: 'page title "Splash Status - Page Inactive" observed 2026-08-13'
+  parent_company:
+    url: https://status.cvent.com/
+    status: 200
+    covers_splash: unverified
+    evidence: >
+      Cvent's status page is a client-rendered Next.js app whose data loads over
+      a GraphQL endpoint with introspection disabled (400
+      INTROSPECTION_DISABLED); no component list is present in the served HTML,
+      so Splash coverage could not be confirmed by probe.
+  note: >
+    Because Splash's own status page is deactivated and the parent-company page
+    could not be shown to carry Splash components, NO canonical `StatusPage`
+    pointer is emitted. The pre-existing `Status` link to status.cvent.com is
+    left in place as the best available operational link, not as a verified
+    Splash status surface.
+support:
+  help_center: https://support.splashthat.com/
+  help_center_probe_status: 403
+  help_center_note: >
+    The Zendesk help center answers 403 to non-browser clients (bot challenge),
+    and its Help Center API (/api/v2/help_center/...) returns 404, so article
+    content could not be machine-read on this pass.
+  credential_channel: Customer Success Manager
+ownership:
+  parent: Cvent
+  acquired: '2024-09-04'
+  source: https://www.cvent.com/en/press-release/Cvent-Expands-its-Field-Marketing-Product-Suite-with-Strategic-Acquisition-of-Splash

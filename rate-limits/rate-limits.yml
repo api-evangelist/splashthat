@@ -1,3 +1,8 @@
+generated: '2026-08-13'
+method: searched
+source: https://support.splashthat.com/hc/en-us/articles/13759878758541-What-is-API-rate-limiting-and-what-are-the-benefits-and-impacts
+secondary_source: https://api-docs.splashthat.com/
+limit_count: 4
 rateLimits:
   description: >
     Splash enforces API rate limits to maintain platform stability and ensure
@@ -19,6 +24,16 @@ rateLimits:
     dailyLimitExceeded: "503 Service Unavailable"
     resetHeader: RateLimit-Reset
     resetUnit: seconds
+    limitHeader: X-RateLimit-Limit-Second
+    remainingHeader: X-RateLimit-Remaining-Second
+    headerSource: https://api-docs.splashthat.com/
+    headerNote: >
+      Splash's published API documentation names three response headers a client
+      can read at runtime: RateLimit-Reset (seconds to wait after a 429),
+      X-RateLimit-Limit-Second (requests allowed in the window) and
+      X-RateLimit-Remaining-Second (requests left). Only Reset follows the IETF
+      RateLimit field naming; the other two are vendor-prefixed.
+    exhaustedBody: '{"message": "API rate limit exceeded"}'
 
   behavior:
     onRateLimitHit: >

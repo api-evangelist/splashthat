@@ -1,3 +1,21 @@
+generated: '2026-08-13'
+method: searched
+source: https://splashthat.com/pricing
+secondary_sources:
+  - https://www.vendr.com/marketplace/splash
+  - https://www.trustradius.com/products/splash-event-platform/pricing
+plan_count: 3
+pricing_published: false
+pricing_note: >
+  Splash publishes NO prices. Its pricing page names tiers and directs every
+  buyer to a custom quote; all dollar figures in this file are third-party
+  market estimates (Vendr, 143 recorded purchases; TrustRadius) and are labelled
+  as estimates on each tier, not as Splash-published rates. Tier names are as
+  reported by those marketplaces — third-party sources also render the entry
+  tier as "Standard" rather than "Starter". splashthat.com answers 403 to every
+  non-browser client (verified 2026-08-13), so the page could not be read
+  directly on this pass. API access is documented as an Enterprise-tier
+  entitlement with credentials issued by a Customer Success Manager.
 plans:
   - name: Starter
     description: >

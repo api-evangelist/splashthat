@@ -1,0 +1,305 @@
+generated: '2026-08-13'
+method: derived
+source: postman/splashthat-api.postman_collection.json
+docs: https://api-docs.splashthat.com/
+note: >
+  Entity/relationship graph derived from the published example payloads and
+  endpoint documentation in Splash's own "Splash API v2.2" Postman collection.
+  Splash publishes no OpenAPI and no schema components, so field lists below are
+  read from real response bodies Splash saved against each request; they are
+  representative of those examples, not an exhaustive schema.
+identifiers:
+  style: numeric integer ids (no type prefixes)
+  exceptions:
+    - Workflow ids are UUIDs (e.g. 0212d6a0-fdad-11ea-be23-d7767e14ad3b)
+    - unsub_tag is an opaque string minted on the RSVP object
+entities:
+  - name: Event
+    endpoints: [GET /events, GET /events/:event_id, DELETE /events]
+    key: id
+    fields:
+      - id
+      - title
+      - description
+      - description_text
+      - event_start
+      - event_end
+      - hide_event_time
+      - venue_name
+      - address
+      - city
+      - state
+      - zip_code
+      - country
+      - domain
+      - custom_domain
+      - paid_for_domain
+      - fq_url
+      - mobile_check_in_url
+      - created_at
+      - modified_at
+      - deleted
+      - group_ids
+      - stats
+      - statistics
+    relationships:
+      - has_one: EventSetting
+        via: event_setting
+      - has_one: SplashTheme
+        via: splash_theme
+      - has_one: EventType
+        via: event_type
+      - has_one: TimeZone
+        via: time_zone
+      - has_many: TicketType
+        via: ticket_types
+      - has_many: GroupContact
+        via: event_id
+      - has_one: EventWorkflow
+        via: viewGroups[]=eventWorkflow
+      - belongs_to: Organization
+        via: organization
+      - belongs_to: User
+        via: user (event owner — event_owner_email/first/last)
+  - name: EventSetting
+    endpoints: [GET /events/:event_id/settings, PATCH /events/:event_id/settings]
+    fields:
+      - id
+      - header_image
+      - rsvp_open
+      - rsvp_method
+      - rsvp_max
+      - rsvp_guest_display
+      - rsvp_closed_state
+      - rsvp_closed_at
+      - wait_list
+      - waitlist_settings
+      - custom_questions
+      - event_cards
+      - venue_tbd
+      - lat
+      - lng
+      - currency
+      - event_hashtag
+      - page_privacy_type
+      - email_settings
+      - event_host
+    relationships:
+      - belongs_to: Event
+        via: event_id (path)
+  - name: GroupContact
+    aka: Event guest / attendee
+    endpoints:
+      - GET /groupcontact/:group_contact_id
+      - GET /groupcontacts
+      - POST /groupcontact
+      - PUT /groupcontact/:group_contact_id
+      - DELETE /groupcontact/:group_contact_id
+    key: id
+    internal_class: Splash\APIBundle\Entity\GroupContact
+    fields:
+      - id
+      - status
+      - created
+      - modified
+      - deleted
+      - salesforce_campaign_member_id
+      - answers
+      - event_lists
+    relationships:
+      - belongs_to: Contact
+        via: contact
+      - belongs_to: Event
+        via: event_id
+      - has_one: EventRsvp
+        via: event_rsvp
+      - has_many: Answer
+        via: answers (question_id + answer)
+  - name: EventRsvp
+    embedded_in: GroupContact
+    fields:
+      - id
+      - event_id
+      - contact_id
+      - first_name
+      - last_name
+      - guest_name
+      - email
+      - plus_one
+      - attending
+      - checked_in
+      - checked_out
+      - waitlist
+      - vip
+      - date_rsvped
+      - ip_address
+      - ticket_number
+      - ticket_sale
+      - tracking_link
+      - parent_event_rsvp
+      - qr_url
+      - unsub_tag
+      - unsubscribed
+      - deleted
+      - created
+      - modified
+    relationships:
+      - belongs_to: Event
+        via: event_id
+      - belongs_to: Contact
+        via: contact_id
+      - has_one: Unsubscribe
+        via: unsub_tag
+      - has_one: TicketSale
+        via: ticket_sale
+      - has_one: EventRsvp
+        via: parent_event_rsvp (plus-one chaining)
+  - name: Contact
+    aka: Organization-level person record
+    endpoints:
+      - GET /contacts
+      - GET /contacts/:contact_id
+      - GET /contact/:contact_id/history
+      - DELETE /contacts/:contact_id
+      - PUT /contacts/:contact_id/anonymize
+    key: id
+    fields:
+      - id
+      - first_name
+      - middle_name
+      - last_name
+      - primary_email
+      - title
+      - organization_name
+      - notes
+      - phone
+      - street
+      - city
+      - state
+      - zip
+      - website
+      - avatar_url
+      - profile_image
+      - gender
+      - birthday
+      - createdate
+      - vip
+      - unsubscribed
+      - bounced
+      - invalid_email
+      - salesforce_id
+      - twitter_url
+      - facebook_url
+      - linkedin_url
+      - pinterest_url
+      - instagram_url
+    relationships:
+      - has_many: GroupContact
+        via: contact.id
+      - has_many: ContactHistory
+        via: GET /contact/:contact_id/history
+      - has_many: Unsubscribe
+        via: unsubscribes
+    note: >
+      Splash's two-level model: a Contact is the organization-wide record; a
+      GroupContact is that person's participation in one event. Creating a
+      GroupContact auto-creates the Contact when none exists.
+  - name: ContactHistory
+    endpoints: [GET /contact/:contact_id/history]
+    fields: [history, tags, custom]
+    note: >
+      history[] entries carry a type (e.g. "rsvp") and an object containing the
+      related event — the privacy/subject-access surface.
+  - name: Unsubscribe
+    endpoints:
+      - GET /public/unsubscribe/:unsub_tag/:unsub_type
+      - POST /public/unsubscribe/:unsub_tag/:unsub_type
+      - DELETE /public/unsubscribe/:unsub_tag/:unsub_type
+    key: unsub_tag
+    fields: [unsub_tag, unsub_type, event_id]
+    relationships:
+      - belongs_to: EventRsvp
+        via: unsub_tag
+      - belongs_to: Event
+        via: event_id
+    note: unsub_type distinguishes event-level from organization-level unsubscribes.
+  - name: EventWorkflow
+    endpoints: [PUT /workflows/:workflow_id/status/:status]
+    key: id (UUID)
+    fields: [id, workflowTypeId, entityId, status]
+    relationships:
+      - belongs_to: Event
+        via: entityId
+    note: Event approval flow; surfaced on /events only with viewGroups[]=eventWorkflow.
+  - name: User
+    endpoints:
+      - GET /v1/team-manager/users
+      - POST /v1/team-manager/users
+      - PATCH /v1/team-manager/users
+      - DELETE /v1/team-manager/users/:user_id
+    key: id
+    fields:
+      - id
+      - email
+      - first_name
+      - last_name
+      - pending_group_invite
+      - created
+      - last_logged_in
+      - last_active
+    relationships:
+      - has_many: Group
+        via: groups / group_ids
+      - has_one: Role
+        via: role / role_id
+      - has_many: Event
+        via: event ownership (transferred on delete)
+  - name: Group
+    endpoints: [GET /v1/team-manager/groups]
+    fields: [id, title, child_group_ids]
+    relationships:
+      - has_many: Group
+        via: child_group_ids (self-referencing hierarchy)
+      - has_many: User
+        via: group_ids
+  - name: Role
+    endpoints: [GET /v1/team-manager/roles]
+    fields: [id, name, description]
+    relationships:
+      - has_many: User
+        via: role_id
+  - name: Form
+    endpoints: [GET /v1/events/:event_id/form]
+    fields:
+      - id
+      - version
+      - name
+      - label
+      - description
+      - type
+      - root
+      - style_configuration
+      - submit_button_label
+      - error_messages
+      - form_library_form
+      - cached
+    relationships:
+      - belongs_to: Event
+        via: event_id (path)
+      - has_one: FormConfig
+        via: form_config.input_types
+  - name: SplashTheme
+    embedded_in: Event
+    fields: [id, name, abbr, image_url, thumbnail_url, sort, active, created]
+    note: Required (splash_theme_id) when creating an event through the CRM API.
+  - name: TicketType
+    embedded_in: Event
+    via: ticket_types
+    note: >
+      Ticketing is present on the Event payload; the published collection has no
+      dedicated ticketing endpoints.
+graph_summary:
+  entity_count: 15
+  root_entities: [Event, Contact, User]
+  join_entity: GroupContact (Event x Contact)
+  privacy_entities: [Contact, ContactHistory, Unsubscribe]

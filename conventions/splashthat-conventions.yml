@@ -1,0 +1,150 @@
+generated: '2026-08-13'
+method: searched
+source: https://api-docs.splashthat.com/
+artifact_source: postman/splashthat-api.postman_collection.json
+note: >
+  Cross-cutting runtime semantics for the Splash API, read from Splash's own
+  published "Splash API v2.2" Postman collection (documentation prose plus the
+  saved example responses) and the Splash Help Center rate-limiting article.
+  Splash publishes no OpenAPI, so none of this is derived from a spec.
+
+base_url: https://api.splashthat.com
+secondary_base_url: https://splashthat.com/api/v2/crm
+content_type: application/json
+
+authentication:
+  style: oauth2-password-grant
+  transport: Authorization header (bearer), or access_token query parameter on some endpoints
+  token_url: https://api.splashthat.com/oauth/v2/token
+  scope: user
+  credential_issuance: Customer Success Manager (no self-serve signup)
+  secondary: 'CRM API uses a static header: AUTHORIZATION: SplashCRM <key>'
+  detail: authentication/splashthat-authentication.yml
+
+response_envelope:
+  documented: true
+  shape:
+    meta:
+      code: HTTP-style status code echoed inside the body (200 on success)
+      message: error name, present on failures
+      errors: error detail array, frequently null
+      errorCode: machine-readable slug on some Team Manager errors (e.g. team__add_user__duplicate_user)
+      cache: boolean, present on cached reads (Forms)
+    data: the payload — object, array, or null
+    success: boolean, present on writes and deletes
+  note: >
+    Splash documents the envelope explicitly: "Splash API responses are JSON
+    payloads, with an envelope containing the data of the response itself. Each
+    envelope has up to three sections." The in-body meta.code duplicates the
+    HTTP status; on the /oauth/v2/token and /crm/events endpoints the envelope
+    is NOT used (token responses are bare OAuth JSON, CRM responses use
+    status/message/data).
+
+pagination:
+  style: page-and-limit (explicit offset pagination)
+  documented: true
+  request_params:
+    - name: page
+      default: 1
+    - name: limit
+      default: 20 on Team Manager endpoints; 25 on /contacts examples; 250 observed max on group contacts
+  response_fields:
+    - limit
+    - count
+    - page
+    - pages
+    - cursor
+  container: >
+    Newer endpoints (Team Manager, group contacts) return a `pagination` object
+    AND repeat limit/count/page/pages/cursor at the top level of the envelope;
+    older endpoints (/events) return page/limit/count alongside `data`.
+  cursor_field_present: true
+  cursor_used: false
+  note: >
+    A `cursor` key is present in the pagination block but is null in every
+    published example — Splash documents explicit page/limit pagination only.
+    Splash also notes that not all responses paginate (a DELETE returns only
+    success or failure).
+
+filtering_and_sorting:
+  documented: true
+  patterns:
+    - array query parameters use bracket indexes — tag_names[0], venues[0],
+      event_type_ids[0], theme_ids[0], exclude_ids[0], status[0],
+      additional_columns[0], viewGroups[]
+    - nested filter maps use bracket keys — filters[search], filters[roles][],
+      filters[groups][], filters[addedDateStart], filters[lastLoginStart]
+    - sort accepts named directions such as created_asc / created_desc
+    - free-text search via `search` (/events) and `text_filter` (/groupcontacts)
+
+field_expansion:
+  mechanism: viewGroups
+  documented: true
+  example: 'GET /events?viewGroups[]=eventWorkflow adds the event_workflow block (workflow id + status) to the payload'
+  secondary: 'additional_columns[] adds custom-question columns to group contact reads'
+
+versioning:
+  scheme: mixed
+  detail: >
+    There is no global version prefix. The documented collection is titled
+    "Splash API v2.2"; the OAuth endpoint is /oauth/v2/token; Team Manager and
+    Forms live under /v1/; the core /events, /groupcontacts and /contacts
+    endpoints are unversioned; the CRM create-event endpoint lives at
+    /api/v2/crm/events on the marketing host.
+  detail_artifact: lifecycle/splashthat-lifecycle.yml
+
+idempotency:
+  supported: false
+  idempotency_key_header: null
+  note: >
+    Splash documents no idempotency key, no request-replay window and no
+    conditional-write headers. POST /groupcontact is explicitly NOT idempotent:
+    Splash warns the behavior "can vary depending upon the guest's status" and
+    that re-posting an email that already has an added/invited status changes
+    the outcome. Retries after a 429 or 500 must be reconciled by the caller.
+    No `Idempotency` pointer is emitted in apis.yml because no idempotency
+    support exists to point at.
+
+request_tracing:
+  request_id_header: null
+  note: No request-id or correlation header is documented in any published example.
+
+rate_limiting:
+  documented: true
+  default: 2 requests per second per Client ID
+  additional: 1000 requests/hour, 250 requests/15 minutes, plan-dependent daily cap
+  exhaustion_status: 429
+  daily_exhaustion_status: 503
+  response_headers:
+    - RateLimit-Reset
+    - X-RateLimit-Limit-Second
+    - X-RateLimit-Remaining-Second
+  body_on_exhaustion: '{"message": "API rate limit exceeded"}'
+  exempt: Simple Postback (outgoing webhook) deliveries do not consume API quota
+  detail: rate-limits/rate-limits.yml
+
+errors:
+  envelope: meta.code + meta.message (+ meta.errorCode on some Team Manager errors)
+  rfc9457: false
+  detail: errors/splashthat-problem-types.yml
+
+caching:
+  documented: true
+  note: >
+    Splash's published best practices recommend response caching on the client.
+    The Forms endpoint returns meta.cache = true to indicate a cached read.
+    No ETag / If-None-Match / Cache-Control conventions are documented.
+
+bulk_operations:
+  - operation: DELETE /events
+    shape: 'JSON body with an "ids" array of event IDs'
+  - operation: DELETE /groupcontact/:group_contact_id
+    shape: documented as "Batch Cancel RSVPs"; cancels rather than hard-deletes
+
+deletion_semantics:
+  soft_delete: true
+  note: >
+    DELETE /contacts/:contact_id is a soft delete that hides the contact from
+    Splash users without removing it from the database. For GDPR erasure Splash
+    directs callers to PUT /contacts/:contact_id/anonymize, which is
+    irreversible and requires organization-admin privileges.

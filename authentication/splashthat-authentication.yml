@@ -1,0 +1,101 @@
+generated: '2026-08-13'
+method: searched
+source: https://api-docs.splashthat.com/
+docs: https://api-docs.splashthat.com/
+artifact_source: postman/splashthat-api.postman_collection.json
+note: >
+  Derived from Splash's own published Postman collection ("Splash API v2.2",
+  public documenter at api-docs.splashthat.com, owner 6088160, published
+  2019-10-22) and its Authentication folder documentation. Splash publishes no
+  OpenAPI, so `derive-authentication.py` produces nothing here; this profile is
+  read from the provider's published request definitions instead. CORRECTION:
+  the Splash token endpoint uses the OAuth 2.0 RESOURCE OWNER PASSWORD
+  CREDENTIALS grant (client_id + client_secret + username + password), not the
+  client_credentials grant.
+summary:
+  types: [oauth2, apiKey]
+  api_key_in: [header]
+  oauth2_flows: [password, refreshToken]
+  credential_issuance: manual
+  self_serve: false
+  issuance_note: >
+    A Client ID and Client Secret are obtained by contacting a Splash Customer
+    Success Manager and are delivered over a secure cryptographic messaging
+    app. There is no developer self-signup for API credentials. The CRM API key
+    is a separate credential, also issued by the Customer Success Manager.
+schemes:
+  - name: SplashOAuth2
+    type: oauth2
+    applies_to: https://api.splashthat.com
+    flows:
+      - flow: password
+        tokenUrl: https://api.splashthat.com/oauth/v2/token
+        method: POST
+        body_encoding: multipart/form-data
+        parameters:
+          - client_id
+          - client_secret
+          - grant_type
+          - scope
+          - username
+          - password
+        scopes:
+          user: Full user-level access to the authenticated Splash account
+      - flow: refreshToken
+        tokenUrl: https://api.splashthat.com/oauth/v2/token
+        method: GET
+        parameters:
+          - client_id
+          - client_secret
+          - grant_type
+          - scope
+          - refresh_token
+    token:
+      transport: Authorization header
+      token_type: bearer
+      response_fields: [access_token, expires_in, token_type, scope, refresh_token]
+      documented_lifetime: 8 hours
+      example_expires_in: 604800
+      lifetime_note: >
+        The Authentication folder states the access token "remains valid for the
+        next 8 hours", while the published success example returns
+        expires_in 604800 (7 days). Splash documents both; the conservative
+        assumption for an integration is the 8-hour figure with a refresh flow.
+      alternate_transport: >
+        The Forms endpoint documentation notes the token may be passed either as
+        an access_token parameter or as a Bearer Authorization header.
+    errors:
+      - error: invalid_grant
+        description: Invalid username and password combination
+      - error: invalid_grant
+        description: Invalid refresh token (HTTP 400 on refresh)
+  - name: SplashCRMKey
+    type: apiKey
+    in: header
+    parameter_name: AUTHORIZATION
+    value_format: 'SplashCRM <crm_api_key>'
+    applies_to: https://splashthat.com/api/v2/crm/events
+    note: >
+      Event CREATION runs through a separate CRM API with its own static key,
+      distinct from the OAuth client credentials used everywhere else. Splash
+      documents it as "a potent endpoint" and asks customers to consult their
+      team before using it.
+authorization_model:
+  - scope: user
+    note: The only scope value that appears in Splash's published token requests.
+  - privilege: organization admin
+    note: >
+      The Anonymize Contact endpoint (PUT /contacts/:contact_id/anonymize)
+      requires elevated privileges granted only to organization admins;
+      inadequate privileges surface as HTTP 403.
+  - privilege: Team Users view permission
+    note: >
+      GET /v1/team-manager/users returns 403 when the authenticated user cannot
+      view Team Users.
+unauthenticated_behavior:
+  status: 401
+  body: '{"message":"Unauthorized"}'
+  note: >
+    Every path on api.splashthat.com, including /.well-known/* and /openapi.json,
+    answers 401 with this body when no token is presented — observed
+    2026-08-13.

@@ -1,0 +1,39 @@
+generated: '2026-08-13'
+method: searched
+source: https://api-docs.splashthat.com/
+artifact_source: postman/splashthat-api.postman_collection.json
+note: >
+  Splash publishes no OpenAPI and no scopes/permissions reference page, so
+  `derive-oauth-scopes.py` returns nothing. The single scope below is read
+  directly from Splash's own published token requests and token responses in
+  the "Splash API v2.2" Postman collection: every Access Token and Refresh
+  Token call sends `scope=user`, and every successful token response echoes
+  `"scope": "user"`. No other scope value appears anywhere in the published
+  contract. Splash's authorization granularity is carried by ROLES and
+  ADMIN PRIVILEGES on the account, not by OAuth scopes.
+scheme: SplashOAuth2
+token_url: https://api.splashthat.com/oauth/v2/token
+scope_count: 1
+scopes:
+  - scope: user
+    description: >
+      User-level access to the authenticated Splash account — the only scope
+      Splash issues. Grants the token the same reach as the user whose
+      username/password was exchanged, across events, group contacts, contacts,
+      unsubscribes, team manager and forms.
+    flows: [password, refreshToken]
+    sources:
+      - postman/splashthat-api.postman_collection.json#Authentication/Access Token
+      - postman/splashthat-api.postman_collection.json#Authentication/Refresh Token
+non_scope_authorization:
+  - name: Organization admin privilege
+    controls: PUT /contacts/:contact_id/anonymize
+    failure_status: 403
+  - name: Team Users view permission
+    controls: GET /v1/team-manager/users
+    failure_status: 403
+  - name: Team Manager roles
+    note: >
+      Roles are first-class objects (GET /v1/team-manager/roles) assigned per
+      user with group scoping — this, not OAuth scope, is where Splash's
+      permission model actually lives.

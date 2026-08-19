@@ -1,0 +1,72 @@
+generated: '2026-08-13'
+method: searched
+source: https://api-docs.splashthat.com/
+docs: https://support.splashthat.com/hc/en-us/articles/360043539711-HTTP-Request-Integration-Guide
+note: >
+  Splash publishes an OUTBOUND event surface but no AsyncAPI document and no
+  machine-readable event catalog, so this artifact captures the webhook
+  mechanism as the provider documents it rather than fabricating a spec. The
+  primary evidence is Splash's own statement in the published "Splash API v2.2"
+  documentation; the configuration detail is corroborated by third-party
+  integration guides that walk through the Splash UI, and is marked as such.
+asyncapi_published: false
+webhooks_published: true
+surface:
+  name: Simple Postback
+  aka: HTTP Request Integration
+  direction: outbound
+  configuration: UI-only
+  configuration_url: https://app.splashthat.com/integrations
+  scopes:
+    - level: organization
+      note: applies across the org
+    - level: event
+      note: configured per event
+    - level: theme
+      note: applies to every event built on a Splash theme
+  transport: HTTP POST to a customer-supplied URL
+  content_types:
+    - application/json
+    - application/x-www-form-urlencoded
+  custom_headers: supported (key/value pairs added in the integration UI)
+  authentication: caller-defined (none, or a static header the customer supplies)
+  payload_shape: user-mapped
+  payload_note: >
+    The customer maps Splash guest/event fields onto the fields the receiving
+    system expects; Splash does not publish a fixed event payload schema. Field
+    names observed in third-party setup guides are the RECEIVER's fields, not a
+    Splash event schema.
+  quota_exempt: true
+  quota_note: >
+    Splash states in its own API documentation that Simple Postback calls "do
+    not count against your API call limit", and recommends the integration as
+    the way to get real-time data without consuming API quota.
+triggers:
+  documented: partial
+  observed:
+    - trigger: Attendee
+      action: RSVP Yes
+      evidence: third-party setup guide (Goldcast), configured inside the Splash UI
+  note: >
+    Splash does not publish the full trigger/action matrix outside its Help
+    Center, which answers 403 to non-browser clients; only the Attendee /
+    RSVP Yes pairing could be confirmed on this pass. No trigger list is
+    asserted here beyond what was observed.
+delivery_semantics:
+  retries: undocumented
+  ordering: undocumented
+  signing: undocumented
+  replay: undocumented
+  note: >
+    No signature header, retry policy, delivery guarantee or replay tool is
+    documented — a consumer cannot verify authenticity of a Splash postback
+    from published information.
+inbound_alternatives:
+  - name: Zapier
+    url: https://zapier.com/apps/splash/integrations/webhook
+    note: Third-party automation surface built on the same postback mechanism.
+provider_quote: >
+  "Also, consider using the Simple Postback (outgoing webhook) integration,
+  which offers real-time, UI-based configuration at the organization or
+  event/theme level, and doesn't count against your API call limit."
+  — Splash API v2.2 documentation, api-docs.splashthat.com

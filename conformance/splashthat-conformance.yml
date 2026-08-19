@@ -1,0 +1,98 @@
+generated: '2026-08-13'
+method: derived
+source: postman/splashthat-api.postman_collection.json
+docs: https://api-docs.splashthat.com/
+note: >
+  Cross-cutting standards posture derived from Splash's own published contract
+  and live probes. Splash publishes no machine-readable compliance program that
+  could be verified on this pass (the splashthat.com marketing host, including
+  its /security page, answers 403 to every non-browser client), so NO
+  `Compliance` pointer is emitted in apis.yml.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >
+      Token endpoint https://api.splashthat.com/oauth/v2/token implements the
+      RFC 6749 resource-owner password credentials grant and the refresh_token
+      grant, returning access_token/token_type/expires_in/scope/refresh_token
+      and RFC 6749 error bodies (invalid_grant + error_description).
+    caveat: >
+      The password grant is deprecated by OAuth 2.1 and RFC 9700 (BCP 240);
+      Splash publishes no authorization_code flow.
+  - id: oidc
+    conforms: false
+    evidence: '/.well-known/openid-configuration returns 401 on the API host, 404 on the docs host'
+  - id: rfc8414-oauth-server-metadata
+    conforms: false
+    evidence: '/.well-known/oauth-authorization-server returns 401 (auth-gated), no anonymous metadata document'
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >
+      Errors use a proprietary meta/data envelope (meta.code, meta.message,
+      meta.errorCode) plus two other shapes; no application/problem+json
+    detail: errors/splashthat-problem-types.yml
+  - id: json-api
+    conforms: false
+    evidence: Custom envelope, no JSON:API media type or document structure
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: 'No /.well-known/security.txt on any Splash host (401/404/403 — see well-known/)'
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No deprecation or sunset policy or header documented
+  - id: pagination
+    conforms: true
+    evidence: >
+      Explicit page/limit request parameters with limit/count/page/pages/cursor
+      in the response, documented in the collection's Pagination section
+    detail: conventions/splashthat-conventions.yml
+  - id: idempotency
+    conforms: false
+    evidence: >
+      No idempotency key, no replay window; POST /groupcontact is explicitly
+      documented as behaving differently on repeat submission
+  - id: rate-limit-headers
+    conforms: partial
+    evidence: >
+      Returns RateLimit-Reset plus vendor-prefixed X-RateLimit-Limit-Second and
+      X-RateLimit-Remaining-Second — the draft IETF RateLimit fields are only
+      partially adopted (Reset only)
+    detail: rate-limits/rate-limits.yml
+  - id: openapi
+    conforms: false
+    evidence: >
+      No OpenAPI/Swagger document is served on any host — probed
+      /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs
+      on api.splashthat.com (all 401) and api-docs.splashthat.com (all 404).
+      The published machine-readable contract is a Postman Collection v2.0.0.
+  - id: postman-collection-v2
+    conforms: true
+    evidence: >
+      https://api-docs.splashthat.com/ publishes "Splash API v2.2" against
+      schema https://schema.getpostman.com/json/collection/v2.0.0/collection.json
+    artifact: postman/splashthat-api.postman_collection.json
+  - id: asyncapi
+    conforms: false
+    evidence: No AsyncAPI document; the event surface is an unspecified outgoing webhook
+    detail: asyncapi/splashthat-webhooks.yml
+  - id: gdpr-data-subject-tooling
+    conforms: partial
+    evidence: >
+      Splash ships purpose-built privacy operations — GET /contact/:id/history
+      (subject access), PUT /contacts/:id/anonymize (erasure, admin-only,
+      irreversible, described by Splash as "a GDPR compliance tool"), and
+      organization/event-level unsubscribe endpoints. This is API-level
+      capability, not a published certification.
+  - id: soc2
+    conforms: unknown
+    evidence: >
+      splashthat.com/security exists as a link but returns 403 to every
+      non-browser client, so no certification could be verified on this pass.
+  - id: iso27001
+    conforms: unknown
+    evidence: same as soc2
+summary:
+  conforms: [oauth2, pagination, postman-collection-v2]
+  partial: [rate-limit-headers, gdpr-data-subject-tooling]
+  does_not_conform: [oidc, rfc8414-oauth-server-metadata, rfc9457-problem-details, json-api, rfc9116-security-txt, rfc8594-sunset-header, idempotency, openapi, asyncapi]
+  unverifiable: [soc2, iso27001]

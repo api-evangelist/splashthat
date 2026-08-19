@@ -1,0 +1,80 @@
+generated: '2026-08-13'
+method: probed
+source: live HTTP probes of every Splash host in apis.yml
+note: >
+  No /.well-known/ document is served by any Splash host. The API host
+  (api.splashthat.com) answers 401 Unauthorized to every unauthenticated path,
+  including /.well-known/*, because the whole surface sits behind an OAuth 2.0
+  bearer token. The docs host (api-docs.splashthat.com, a Postman public
+  documenter) returns its HTML 404 shell. The marketing host (splashthat.com)
+  is behind a bot challenge that answers 403 to non-browser clients on most
+  paths and a bare 404 on the rest. Because nothing returned a real document,
+  NO WellKnown / SecurityTxt pointer is emitted in apis.yml — this file records
+  a verified absence, not a presence.
+hosts:
+  - host: https://api.splashthat.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 401
+      - path: /.well-known/openid-configuration
+        status: 401
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+      - path: /.well-known/oauth-protected-resource
+        status: 401
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/ai-plugin.json
+        status: 401
+      - path: /.well-known/agent-card.json
+        status: 401
+      - path: /.well-known/agent.json
+        status: 401
+      - path: /llms.txt
+        status: 401
+  - host: https://api-docs.splashthat.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /llms.txt
+        status: 404
+  - host: https://splashthat.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+        note: bot challenge (HTML interstitial), not a document
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /llms.txt
+        status: 403
+summary:
+  documents_found: 0
+  security_txt: false
+  openid_configuration: false
+  oauth_authorization_server: false
+  api_catalog: false
+  agent_card: false

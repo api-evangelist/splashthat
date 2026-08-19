@@ -1,0 +1,50 @@
+generated: '2026-08-13'
+method: searched
+source: >
+  npm registry search + registry.npmjs.org metadata, PyPI JSON API, and the
+  SplashThat GitHub organization repository listing (github.com/SplashThat)
+note: >
+  Splash publishes NO first-party client SDK in any public registry. The
+  official developer surface is a Postman public collection
+  (https://api-docs.splashthat.com/) with copy-paste HTTP examples, and API
+  credentials are issued by a Customer Success Manager rather than self-serve,
+  so there is no distributed client library to version. The SplashThat GitHub
+  organization exists and is genuinely theirs (its forks of Symfony bundles
+  such as FOSOAuthServerBundle and RMSPushNotificationsBundle match the
+  `Splash\APIBundle\Entity\GroupContact` class name that leaks in the API's own
+  412 error payload), but every public repository there is a fork of a
+  third-party project or an interview/tutorial scaffold — none is a Splash API
+  client. Because no OFFICIAL SDK exists, NO `SDKs` pointer is emitted in
+  apis.yml; only `Packages`.
+official_package_count: 0
+third_party_package_count: 1
+packages:
+  - language: javascript
+    registry: npm
+    name: '@pga/splashthat-api'
+    url: https://www.npmjs.com/package/@pga/splashthat-api
+    install: npm install @pga/splashthat-api
+    official: false
+    version: 0.0.3
+    published: '2023-02-03'
+    first_published: '2022-05-09'
+    note: >
+      Third-party wrapper published by the PGA of America engineering account
+      (maintainers bsubedi26, jasonwalkow, kevinjscott, pgamachineuser) — not by
+      Splash. No repository field, no description, last release 2023-02-03,
+      more than three years before this probe, against a Splash API whose
+      published collection is versioned v2.2. Treat as abandoned, not as a
+      client library a consumer should adopt.
+registries_checked:
+  - registry: npm
+    result: no first-party package; one third-party wrapper (above)
+  - registry: pypi
+    result: 404 for splashthat and splash-api — no package
+  - registry: rubygems
+    result: no first-party package
+  - registry: packagist
+    result: no first-party package (Splash runs Symfony internally but publishes none)
+  - registry: nuget
+    result: no first-party package
+  - registry: pkg.go.dev
+    result: no first-party package

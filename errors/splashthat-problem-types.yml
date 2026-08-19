@@ -1,0 +1,136 @@
+generated: '2026-08-13'
+method: derived
+source: postman/splashthat-api.postman_collection.json
+docs: https://api-docs.splashthat.com/
+note: >
+  Derived from the saved example responses in Splash's own published "Splash API
+  v2.2" Postman collection — every status code, message and body below is
+  copied from a response Splash published against a named request. Splash does
+  NOT use RFC 9457 problem+json; errors ride the standard Splash envelope with
+  the status echoed in meta.code. The OAuth token endpoint and the CRM
+  create-event endpoint use different, non-envelope shapes.
+format: proprietary-envelope
+rfc9457: false
+envelope:
+  meta:
+    code: integer, echoes the HTTP status
+    message: human-readable error name, sometimes prefixed '[[Splash Exception]]'
+    errors: array or null
+    errorCode: machine-readable slug, present on some Team Manager errors
+  data: 'object, array, or [] — sometimes carries the offending identifier'
+problems:
+  - status: 400
+    title: Bad Request
+    envelope: meta
+    example_body: '{"meta":{"code":400,"message":"Bad Request","errors":null},"data":[]}'
+    cause: Malformed JSON body on group contact create/update
+    source_operation: POST /groupcontact
+  - status: 400
+    title: Bad Request (validation)
+    envelope: meta
+    example_body: '{"meta":{"code":400,"message":"[[Splash Exception]] {\"user.roleId.user.roleId\":\"Invalid role provided\"}","errors":null},"data":[]}'
+    cause: Invalid role_id or group_ids on a Team Manager user update
+    remediation: Fetch valid ids from GET /v1/team-manager/roles and /v1/team-manager/groups first
+    source_operation: PATCH /v1/team-manager/users
+  - status: 400
+    title: Bad Request (team membership)
+    envelope: meta
+    example_body: '{"meta":{"code":400,"message":"[[Splash Exception]] User does not belong to the team","errors":null},"data":[]}'
+    cause: user_to_transfer_events names a user outside the organization
+    source_operation: DELETE /v1/team-manager/users/:user_id
+  - status: 400
+    title: invalid_grant
+    envelope: oauth
+    example_body: '{"error":"invalid_grant","error_description":"Invalid refresh token"}'
+    cause: Expired or wrong refresh token
+    remediation: Re-run the password grant to obtain a new access/refresh pair
+    source_operation: GET /oauth/v2/token (grant_type=refresh_token)
+  - status: 400
+    title: invalid_grant (credentials)
+    envelope: oauth
+    example_body: '{"error":"invalid_grant","error_description":"Invalid username and password combination"}'
+    cause: Bad username/password in the resource-owner password grant
+    source_operation: POST /oauth/v2/token
+  - status: 401
+    title: Unauthorized
+    envelope: bare
+    example_body: '{"message":"Unauthorized"}'
+    cause: Missing, malformed or expired bearer token
+    remediation: Redeem the refresh token; tokens are documented as valid for 8 hours
+    source_operation: GET /v1/events/:event_id/form (and every unauthenticated request to api.splashthat.com)
+  - status: 403
+    title: Forbidden
+    envelope: meta
+    example_body: '{"meta":{"code":403,"message":"Forbidden","errors":null},"data":{"event_id":"999999999"}}'
+    cause: >
+      Unknown or inaccessible event id — Splash answers 403 rather than 404 for
+      an id the token cannot reach, and echoes the offending id in data.
+    source_operation: GET /events/:event_id
+  - status: 403
+    title: Forbidden (delete)
+    envelope: meta
+    example_body: '{"meta":{"code":403,"message":"Forbidden","errors":null},"data":[]}'
+    cause: Batch delete referencing events that do not exist or are not visible to the token
+    source_operation: DELETE /events
+  - status: 403
+    title: Forbidden (privilege)
+    envelope: meta
+    cause: >
+      Caller lacks the privilege the endpoint requires — organization admin for
+      contact anonymization, Team Users view permission for the user list.
+    source_operation: PUT /contacts/:contact_id/anonymize, GET /v1/team-manager/users
+  - status: 409
+    title: Conflict — duplicate user invite
+    envelope: meta
+    error_code: team__add_user__duplicate_user
+    example_body: '{"meta":{"code":409,"message":"[[Splash Exception]] User has already been invited to the team","errors":null,"errorCode":"team__add_user__duplicate_user"}}'
+    cause: Inviting an email already invited to the organization
+    source_operation: POST /v1/team-manager/users
+  - status: 412
+    title: Precondition Failed — entity does not exist
+    envelope: meta
+    example_body: '{"meta":{"code":412,"message":"Precondition Failed","errors":null},"data":{"class":"Splash\\APIBundle\\Entity\\GroupContact","id":"..."}}'
+    cause: Group contact id not found; data carries the internal entity class and id
+    source_operation: DELETE /groupcontact/:group_contact_id
+  - status: 429
+    title: Too Many Requests
+    envelope: bare
+    example_body: '{"message":"API rate limit exceeded"}'
+    cause: More than 2 requests/second (or the hourly/15-minute bucket) for the Client ID
+    remediation: Wait the number of seconds in the RateLimit-Reset header before retrying
+    source_operation: any
+    source_docs: https://support.splashthat.com/hc/en-us/articles/13759878758541
+  - status: 500
+    title: Internal Server Error (invalid JSON)
+    envelope: meta
+    example_body: '{"meta":{"code":500,"message":"Internal Server Error","errors":null},"data":{"errors":[{"message":"The object mu..."}]}}'
+    cause: >
+      Malformed JSON body on an event update — Splash returns 500, not 400, for
+      this class of caller error.
+    source_operation: PATCH /events/:event_id/settings
+  - status: 500
+    title: Internal Server Error (missing contact)
+    envelope: meta
+    example_body: '{"meta":{"code":500,"message":"Internal Server Error","errors":null},"data":[]}'
+    cause: >
+      Deleting a contact id that does not exist — again a 500 where a 404 would
+      be expected.
+    source_operation: DELETE /contacts/:contact_id
+  - status: 503
+    title: Service Unavailable — daily limit reached
+    envelope: unknown
+    cause: The account's plan-dependent daily API allocation is exhausted
+    remediation: >
+      Syncs stop for the remainder of the day and resume the next day; failed
+      records are not re-synced automatically. Contact the CSM to review the
+      daily allocation.
+    source_docs: https://support.splashthat.com/hc/en-us/articles/13759878758541
+observations:
+  - Splash returns 403 where most APIs return 404 for an unknown id.
+  - >
+    Two distinct caller errors (bad JSON on event update, deleting a nonexistent
+    contact) are documented as 500 — an agent cannot treat 5xx as
+    retryable-server-fault on this API.
+  - >
+    Three different error shapes coexist: the meta envelope, bare
+    {"message": "..."} for auth/rate-limit, and OAuth error/error_description.

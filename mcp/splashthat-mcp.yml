@@ -1,0 +1,119 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: postman/splashthat-api.postman_collection.json
+note: >
+  NO Splash MCP server exists. Searched the Splash developer surface, the
+  SplashThat GitHub organization (35 public repos, all forks or tutorial
+  scaffolds — none MCP-related), npm and PyPI. Nothing published by Splash or by
+  its parent company Cvent exposes this API over MCP. The tools below are a
+  CANDIDATE surface derived one-to-one from the operations Splash publishes in
+  its own "Splash API v2.2" Postman collection — they are what an MCP server
+  would expose if someone built one, not something an agent can call today.
+  No endpoint is invented.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: oauth
+  verified: searched
+  note: >
+    auth records what a server WOULD need — the Splash API is reachable only
+    with an OAuth 2.0 password-grant bearer token whose client credentials are
+    issued manually by a Customer Success Manager, which is itself a hard
+    barrier to any agent-callable deployment.
+server:
+  name: splashthat
+  transport: null
+  url: null
+tool_count: 24
+tools:
+  - name: create_access_token
+    description: Exchange client credentials plus username/password for a Splash access token
+    source_operation: POST https://api.splashthat.com/oauth/v2/token
+  - name: refresh_access_token
+    description: Redeem a refresh token for a new Splash access token
+    source_operation: GET https://api.splashthat.com/oauth/v2/token
+  - name: list_events
+    description: List events with search, tag, venue, date-range, type and theme filters
+    source_operation: GET https://api.splashthat.com/events
+  - name: get_event
+    description: Retrieve a single event by id, optionally including its approval workflow
+    source_operation: GET https://api.splashthat.com/events/:event_id
+  - name: get_event_settings
+    description: Retrieve the extended settings block for an event (RSVP, waitlist, custom questions)
+    source_operation: GET https://api.splashthat.com/events/:event_id/settings
+  - name: update_event
+    description: Update an event's title, domain, times, venue and settings
+    source_operation: PATCH https://api.splashthat.com/events/:event_id/settings
+  - name: delete_events
+    description: Batch delete events by id array
+    source_operation: DELETE https://api.splashthat.com/events
+  - name: update_workflow_status
+    description: Advance an event approval workflow to a new status
+    source_operation: PUT https://api.splashthat.com/workflows/:workflow_id/status/:status
+  - name: create_event_via_crm
+    description: Create an event through the separate CRM API (requires a distinct SplashCRM key)
+    source_operation: POST https://splashthat.com/api/v2/crm/events
+  - name: get_group_contact
+    description: Retrieve a single event guest (group contact) by id
+    source_operation: GET https://api.splashthat.com/groupcontact/:group_contact_id
+  - name: list_event_group_contacts
+    description: List the guests for one event with status and text filters
+    source_operation: GET https://api.splashthat.com/groupcontacts?event_id=
+  - name: list_group_contacts
+    description: List guests across the whole organization
+    source_operation: GET https://api.splashthat.com/groupcontacts
+  - name: create_group_contact
+    description: Add a guest to an event, optionally sending the confirmation email
+    source_operation: POST https://api.splashthat.com/groupcontact
+  - name: update_group_contact
+    description: Update a guest's status (added, checked-in, waitlisted) and custom answers
+    source_operation: PUT https://api.splashthat.com/groupcontact/:group_contact_id
+  - name: cancel_group_contact_rsvp
+    description: Cancel a guest's RSVP
+    source_operation: DELETE https://api.splashthat.com/groupcontact/:group_contact_id
+  - name: list_contacts
+    description: List organization-level contacts with pagination
+    source_operation: GET https://api.splashthat.com/contacts
+  - name: get_contact
+    description: Retrieve one organization-level contact by id
+    source_operation: GET https://api.splashthat.com/contacts/:contact_id
+  - name: get_contact_history
+    description: Retrieve a contact's event history (subject-access surface)
+    source_operation: GET https://api.splashthat.com/contact/:contact_id/history
+  - name: delete_contact
+    description: Soft-delete a contact
+    source_operation: DELETE https://api.splashthat.com/contacts/:contact_id
+  - name: anonymize_contact
+    description: Irreversibly anonymize a contact for GDPR erasure (organization admins only)
+    source_operation: PUT https://api.splashthat.com/contacts/:contact_id/anonymize
+  - name: get_unsubscribe
+    description: Look up an unsubscribe by tag and type
+    source_operation: GET https://api.splashthat.com/public/unsubscribe/:unsub_tag/:unsub_type
+  - name: create_unsubscribe
+    description: Unsubscribe a contact at the event or organization level
+    source_operation: POST https://api.splashthat.com/public/unsubscribe/:unsub_tag/:unsub_type
+  - name: list_team_users
+    description: List organization users with role, group, date and search filters
+    source_operation: GET https://api.splashthat.com/v1/team-manager/users
+  - name: get_event_form
+    description: Retrieve the registration form definition for an event
+    source_operation: GET https://api.splashthat.com/v1/events/:event_id/form
+write_operations:
+  - update_event
+  - delete_events
+  - create_event_via_crm
+  - create_group_contact
+  - update_group_contact
+  - cancel_group_contact_rsvp
+  - delete_contact
+  - anonymize_contact
+  - create_unsubscribe
+  - update_workflow_status
+consequence_note: >
+  Several candidate tools are irreversible or externally visible — anonymize_contact
+  cannot be undone, create_group_contact can send a confirmation email to a real
+  person, and delete_events removes event pages. Any real server built from this
+  list needs escalation gating on those, not blanket tool exposure.
