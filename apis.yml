@@ -24,6 +24,14 @@ created: "2026-06-13"
 modified: "2026-08-13"
 specificationVersion: '0.23'
 tags:
+  - Event
+  - Event Marketing
+  - Event Management
+  - Guest Registration
+  - Ticketing
+  - Check-in
+  - Analytics
+tags_raw:
   - Events
   - Event Marketing
   - Event Management
@@ -48,6 +56,12 @@ apis:
     humanURL: https://api-docs.splashthat.com/
     baseURL: https://api.splashthat.com
     tags:
+      - Event
+      - Guest Registration
+      - Ticketing
+      - Check-in
+      - Analytics
+    tags_raw:
       - Events
       - Guest Registration
       - Ticketing
