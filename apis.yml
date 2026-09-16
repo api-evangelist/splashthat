@@ -1,11 +1,11 @@
 name: Splash
-description: >
-  Splash is an event marketing platform that helps companies market, manage,
-  and measure their live, virtual, and hybrid event programs. The Splash REST
-  API enables brands and agencies to programmatically manage events, handle
-  guest registration, process check-in, and pull event analytics. API access
-  uses OAuth 2.0 client credentials and covers resources such as events,
-  group contacts (guests), contacts, and ticketing.
+description: 'Splash is an event marketing platform that helps companies market, manage, and measure their
+  live, virtual, and hybrid event programs. The Splash REST API enables brands and agencies to programmatically
+  manage events, handle guest registration, process check-in, and pull event analytics. API access uses
+  OAuth 2.0 client credentials and covers resources such as events, group contacts (guests), contacts,
+  and ticketing.
+
+  '
 deliveryModel:
   model: saas
   open_source: false
@@ -31,112 +31,58 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/splashthat.png
 url: https://raw.githubusercontent.com/api-evangelist/splashthat/refs/heads/main/apis.yml
-created: "2026-06-13"
-modified: "2026-08-13"
+created: '2026-06-13'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 tags:
+- Event
+- Event Marketing
+- Event Management
+- Guest Registration
+- Ticketing
+- Check-in
+- Analytics
+tags_raw:
+- Events
+- Event Marketing
+- Event Management
+- Guest Registration
+- Ticketing
+- Check-In
+- Analytics
+apis:
+- name: Splash API
+  description: 'REST API for the Splash event marketing platform. Enables programmatic management of events,
+    guest (GroupContact) records, organization-level contacts, unsubscribes, event approval workflows,
+    team management, and registration forms, plus event creation through a separate CRM endpoint. Authentication
+    uses the OAuth 2.0 resource-owner password grant — a Client ID, Client Secret, username and password
+    are exchanged for a bearer token at /oauth/v2/token with scope "user". Credentials are issued manually
+    by the Splash Customer Success team; there is no self-serve signup. The published machine-readable
+    contract is a Postman collection ("Splash API v2.2"), not an OpenAPI.
+
+    '
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://api-docs.splashthat.com/
+  baseURL: https://api.splashthat.com
+  tags:
   - Event
-  - Event Marketing
-  - Event Management
   - Guest Registration
   - Ticketing
   - Check-in
   - Analytics
-tags_raw:
+  tags_raw:
   - Events
-  - Event Marketing
-  - Event Management
   - Guest Registration
   - Ticketing
   - Check-In
   - Analytics
-apis:
-  - name: Splash API
-    description: >
-      REST API for the Splash event marketing platform. Enables programmatic
-      management of events, guest (GroupContact) records, organization-level
-      contacts, unsubscribes, event approval workflows, team management, and
-      registration forms, plus event creation through a separate CRM endpoint.
-      Authentication uses the OAuth 2.0 resource-owner password grant — a
-      Client ID, Client Secret, username and password are exchanged for a
-      bearer token at /oauth/v2/token with scope "user". Credentials are issued
-      manually by the Splash Customer Success team; there is no self-serve
-      signup. The published machine-readable contract is a Postman collection
-      ("Splash API v2.2"), not an OpenAPI.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://api-docs.splashthat.com/
-    baseURL: https://api.splashthat.com
-    tags:
-      - Event
-      - Guest Registration
-      - Ticketing
-      - Check-in
-      - Analytics
-    tags_raw:
-      - Events
-      - Guest Registration
-      - Ticketing
-      - Check-In
-      - Analytics
-    properties:
-      - type: Documentation
-        url: https://api-docs.splashthat.com/
-      - type: APIReference
-        url: https://api-docs.splashthat.com/
-      - type: Postman
-        url: postman/splashthat-api.postman_collection.json
-      - type: Authentication
-        url: authentication/splashthat-authentication.yml
-      - type: OAuthScopes
-        url: scopes/splashthat-scopes.yml
-      - type: Conventions
-        url: conventions/splashthat-conventions.yml
-      - type: ErrorCatalog
-        url: errors/splashthat-problem-types.yml
-      - type: DataModel
-        url: data-model/splashthat-data-model.yml
-      - type: RateLimits
-        url: rate-limits/rate-limits.yml
-      - type: X-MCPServerCandidate
-        url: mcp/splashthat-mcp.yml
-        note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
-      - type: Webhooks
-        url: asyncapi/splashthat-webhooks.yml
-    contact:
-      - FN: Splash Support
-        url: https://support.splashthat.com/
-        email: ""
-common:
-  - type: DomainSecurity
-    url: security/splashthat-domain-security.yml
+  properties:
   - type: Documentation
     url: https://api-docs.splashthat.com/
-  - type: Support
-    url: https://support.splashthat.com/
-  - type: Blog
-    url: https://splashthat.com/blog
-  - type: Press
-    url: https://splashthat.com/press
-  - type: Pricing
-    url: https://splashthat.com/pricing
-  - type: Status
-    url: https://status.cvent.com/
-  - type: Integrations
-    url: https://splashthat.com/platform/integrations
-  - type: TermsOfService
-    url: https://splashthat.com/terms
-  - type: PrivacyPolicy
-    url: https://splashthat.com/privacy
-  - type: Security
-    url: https://splashthat.com/security
-  - type: RateLimits
-    url: https://support.splashthat.com/hc/en-us/articles/13759878758541-What-is-API-rate-limiting-and-what-are-the-benefits-and-impacts
   - type: APIReference
     url: https://api-docs.splashthat.com/
   - type: Postman
     url: postman/splashthat-api.postman_collection.json
-  - type: GitHubOrganization
-    url: https://github.com/SplashThat
   - type: Authentication
     url: authentication/splashthat-authentication.yml
   - type: OAuthScopes
@@ -147,19 +93,79 @@ common:
     url: errors/splashthat-problem-types.yml
   - type: DataModel
     url: data-model/splashthat-data-model.yml
-  - type: Lifecycle
-    url: lifecycle/splashthat-lifecycle.yml
-  - type: Conformance
-    url: conformance/splashthat-conformance.yml
-  - type: Packages
-    url: packages/splashthat-packages.yml
+  - type: RateLimits
+    url: rate-limits/rate-limits.yml
   - type: X-MCPServerCandidate
     url: mcp/splashthat-mcp.yml
-    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+      — a tool list derived from the published API contracts, not an existing server. The scorer already
+      read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+      surfaces with a server that does not exist.'
   - type: Webhooks
     url: asyncapi/splashthat-webhooks.yml
-  - type: LLMsTxt
-    url: llms/splashthat-llms.txt
+  contact:
+  - FN: Splash Support
+    url: https://support.splashthat.com/
+    email: ''
+common:
+- type: Website
+  url: https://splashthat.com
+- type: DomainSecurity
+  url: security/splashthat-domain-security.yml
+- type: Documentation
+  url: https://api-docs.splashthat.com/
+- type: Support
+  url: https://support.splashthat.com/
+- type: Blog
+  url: https://splashthat.com/blog
+- type: Press
+  url: https://splashthat.com/press
+- type: Pricing
+  url: https://splashthat.com/pricing
+- type: Status
+  url: https://status.cvent.com/
+- type: Integrations
+  url: https://splashthat.com/platform/integrations
+- type: TermsOfService
+  url: https://splashthat.com/terms
+- type: PrivacyPolicy
+  url: https://splashthat.com/privacy
+- type: Security
+  url: https://splashthat.com/security
+- type: RateLimits
+  url: https://support.splashthat.com/hc/en-us/articles/13759878758541-What-is-API-rate-limiting-and-what-are-the-benefits-and-impacts
+- type: APIReference
+  url: https://api-docs.splashthat.com/
+- type: Postman
+  url: postman/splashthat-api.postman_collection.json
+- type: GitHubOrganization
+  url: https://github.com/SplashThat
+- type: Authentication
+  url: authentication/splashthat-authentication.yml
+- type: OAuthScopes
+  url: scopes/splashthat-scopes.yml
+- type: Conventions
+  url: conventions/splashthat-conventions.yml
+- type: ErrorCatalog
+  url: errors/splashthat-problem-types.yml
+- type: DataModel
+  url: data-model/splashthat-data-model.yml
+- type: Lifecycle
+  url: lifecycle/splashthat-lifecycle.yml
+- type: Conformance
+  url: conformance/splashthat-conformance.yml
+- type: Packages
+  url: packages/splashthat-packages.yml
+- type: X-MCPServerCandidate
+  url: mcp/splashthat-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
+- type: Webhooks
+  url: asyncapi/splashthat-webhooks.yml
+- type: LLMsTxt
+  url: llms/splashthat-llms.txt
 x-enrichment:
   date: '2026-08-13'
   status: enriched
@@ -168,25 +174,25 @@ x-enrichment:
 x-coverage:
   state: covered
   reason: postman-collection-is-the-contract
-  detail: >
-    Splash publishes no OpenAPI, but it does publish a real machine-readable
-    contract — the public Postman collection "Splash API v2.2" at
-    api-docs.splashthat.com — which was fetched verbatim and used to ground the
-    authentication, scopes, conventions, error, data-model and candidate-MCP
-    artifacts. The API host itself answers 401 to every anonymous path.
+  detail: 'Splash publishes no OpenAPI, but it does publish a real machine-readable contract — the public
+    Postman collection "Splash API v2.2" at api-docs.splashthat.com — which was fetched verbatim and used
+    to ground the authentication, scopes, conventions, error, data-model and candidate-MCP artifacts.
+    The API host itself answers 401 to every anonymous path.
+
+    '
   evidence:
-    - url: https://api-docs.splashthat.com/api/collections/6088160/SVmvTe3o?segregateAuth=true&versionTag=latest
-      status: 200
-    - url: https://api.splashthat.com/openapi.json
-      status: 401
-    - url: https://api-docs.splashthat.com/openapi.json
-      status: 404
-    - url: https://splashthat.com/pricing
-      status: 403
-    - url: https://support.splashthat.com/hc/en-us/articles/13759878758541
-      status: 403
+  - url: https://api-docs.splashthat.com/api/collections/6088160/SVmvTe3o?segregateAuth=true&versionTag=latest
+    status: 200
+  - url: https://api.splashthat.com/openapi.json
+    status: 401
+  - url: https://api-docs.splashthat.com/openapi.json
+    status: 404
+  - url: https://splashthat.com/pricing
+    status: 403
+  - url: https://support.splashthat.com/hc/en-us/articles/13759878758541
+    status: 403
   checked: '2026-08-13'
 maintainers:
-  - FN: API Evangelist
-    url: https://apievangelist.com
-    email: info@apievangelist.com
+- FN: API Evangelist
+  url: https://apievangelist.com
+  email: info@apievangelist.com
