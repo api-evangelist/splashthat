@@ -94,3 +94,28 @@ plans:
       dailyApiLimit: contact-CSM-for-details
       rateLimitHeader: "429 Too Many Requests"
       rateLimitResetHeader: RateLimit-Reset
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  units: []
+  plans:
+  - name: Starter
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Professional
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
