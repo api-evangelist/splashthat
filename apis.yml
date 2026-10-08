@@ -108,6 +108,10 @@ apis:
     url: https://support.splashthat.com/
     email: ''
 common:
+- type: Plans
+  url: plans/plans.yml
+- type: FinOps
+  url: finops/finops.yml
 - type: Website
   url: https://splashthat.com
 - type: DomainSecurity
