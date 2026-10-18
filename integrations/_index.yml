@@ -65,5 +65,5 @@
     - connectors/applications/splash
     vendor_link: https://splashthat.com/
     builder: Fivetran
-  status: pending-partner-spec
+  status: not-a-workflow
   arazzo: null
